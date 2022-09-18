@@ -1,48 +1,44 @@
-#!/usr/bin/env bash
+#!/usr/bin/python3
+import sys
+def g(x1, num):
+    return ((x1 ** 2) + 1) % num
 
-check_factor()
-{
-	if [ $# -ne 3 ];
-        then
-                args=("$@")
-                count=0
-                num2=1
-                for a in ${args[*]};
-                do
-                        if [ $count -gt 1 ];
-                        then
-                                num2=$(echo $a*$num2 | bc)
-                        fi
-                        count=$((count + 1))
-                done
-        else
-                num2=$3
-        fi
 
-        num1=$2
-        num=$(echo "$1" | tr ':' '=')
+def gg(h, j):
+    return g(g(h, j), j)
 
-        result=$(echo "if($num2 > $num1) 1 else 0" | bc)
-	        if ((result == 1)); then
-		        numcp=$num1
-		        num1=$num2
-		        num2=$numcp
-                fi
 
-        echo "$num$num1*$num2"
-}
+def eculid(a, b):
+    while b != 0:
+        remainder = a % b
+        a = b
+        b = remainder
+    if a == 1:
+        return False
+    print(f"{f}={f//a}*{a}")
+    return True
 
-if [ $# -ne 1 ]
-then
-        echo 'Usage: rsa <file>'
-        exit 1
-else
 
-        while read i
-        do
-
-                result=$(factor "$i")
-                check_factor $result
-
-        done < "$1"
-fi
+with open(sys.argv[1], "r") as a_file:
+    for line in a_file:
+        f = int(line.strip())
+        x = 0
+        y = 0
+        n = 1
+        flag = 0
+        while n < f:
+            if y == 0 and x == 0:
+                x = g(x, f)
+                y = g(y, f)
+                continue
+            else:
+                x = g(x, f)
+                y = gg(y, f)
+            z = abs(y - x)
+            result = eculid(z, f)
+            if result is True:
+                break
+            if y == x:
+                break
+            n += 1
+a_file.close()
